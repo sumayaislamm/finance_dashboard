@@ -149,7 +149,7 @@ const Sidebar = () => {
 
                             {/* List item */}
                                <NavLink
-                                to="/setting"
+                                to="/settings"
                                 className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
                             >
                             <li>
