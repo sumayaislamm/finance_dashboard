@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useRole } from "../../context/RoleContext";
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
-    const [role, setRole] = useState("Viewer");
+   const { role } = useRole();
 
     const [search, setSearch] = useState("");
     const [typeFilter, setTypeFilter] = useState("all");
@@ -24,7 +25,7 @@ const Transactions = () => {
             .then(data => setTransactions(data.transactions));
     }, []);
 
-    // 🔍 Filter
+    //  Filter
     const filteredTransactions = transactions.filter((t) => {
         const matchSearch = t.category
             .toLowerCase()
@@ -80,16 +81,6 @@ const Transactions = () => {
 
     return (
         <div className="p-6">
-
-            {/* Role Switch */}
-            <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="border p-2 mb-4"
-            >
-                <option>Viewer</option>
-                <option>Admin</option>
-            </select>
 
             {/* Filters */}
             <div className="flex gap-3 mb-4">

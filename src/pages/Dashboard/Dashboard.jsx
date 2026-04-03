@@ -13,8 +13,11 @@ import {
     YAxis,
     CartesianGrid,
 } from "recharts";
+import { useRole } from "../../context/RoleContext";
+import { Link } from "react-router";
 
 const Dashboard = () => {
+     const { role } = useRole();
     const pieData = mockdata.spendingByCategory;
     const lineData = mockdata.balanceTrend;
 
@@ -44,8 +47,8 @@ const Dashboard = () => {
                 {/* Left Column */}
                 <div className="w-full md:w-1/2 flex flex-col gap-6">
                     {/* Summary */}
-                    <div className="mb-4 ">
-                        <h2 className="text-center text-lg font-semibold mb-3">
+                    <div className="">
+                        <h2 className="text-center text-lg font-semibold pb-2">
                             Financial Summary
                         </h2>
 
@@ -53,16 +56,31 @@ const Dashboard = () => {
                             <div className="stat">
                                 <div className="stat-title font-bold">Account balance</div>
                                 <div className="stat-value">${mockdata.summary.totalBalance}</div>
+                                {role === "Admin" && (
+                                    <Link className=" text-center" to="/transactions">
+                                        <button className="btn btn-xs bg-primary text-base-300">Add Balance</button>
+                                    </Link>
+                                )}
                             </div>
 
                             <div className="stat">
                                 <div className="stat-title font-bold">Income</div>
                                 <div className="stat-value">${mockdata.summary.totalIncome}</div>
+                                {role === "Admin" && (
+                                    <Link className=" text-center" to="/transactions">
+                                        <button className="btn btn-xs bg-primary text-base-300">Add Income</button>
+                                    </Link>
+                                )}
                             </div>
 
                             <div className="stat">
                                 <div className="stat-title font-bold">Expenses</div>
                                 <div className="stat-value">${mockdata.summary.totalExpense}</div>
+                                {role === "Admin" && (
+                                    <Link className=" text-center" to="/transactions">
+                                        <button className="btn btn-xs bg-primary text-base-300">Add Expenses</button>
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -116,7 +134,7 @@ const Dashboard = () => {
                                     margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    + <XAxis dataKey="month" />
+                                    <XAxis dataKey="month" />
                                     <YAxis />
                                     <Tooltip />
                                     <Legend verticalAlign="top" height={36} />
