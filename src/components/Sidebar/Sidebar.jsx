@@ -8,12 +8,27 @@ const Sidebar = () => {
                 <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content">
                     {/* Navbar */}
-                    <nav className="navbar w-full bg-base-300">
-                        <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost">
+                    <nav className="navbar w-full flex justify-between bg-base-300 px-5">
+                        <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost bg-base-300 text-primary font-bold">
                             {/* Sidebar toggle icon */}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>
                         </label>
-                        <div className="px-4">Navbar Title</div>
+                    
+                            <div>
+                                <label className="flex cursor-pointer gap-2">
+                                    <span className="label-text">Light</span>
+                                    <input
+                                        type="checkbox"
+                                        value="dark"
+                                        className="toggle theme-controller"
+                                    />
+                                    <span className="label-text">Dark</span>
+                                </label>
+                            </div>
+                            <div className="px-4 text-2xl text-primary font-bold">FINOVA</div>
+                    
+
+
                     </nav>
                     {/* Page content here */}
                     <div className="p-4">
@@ -30,7 +45,7 @@ const Sidebar = () => {
                             {/* List item */}
                             <NavLink
                                 to="/"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
                                 <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Dashboard">
@@ -44,7 +59,7 @@ const Sidebar = () => {
                             {/* Transactions */}
                             <NavLink
                                 to="/transactions"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
                                 <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Transactions">
@@ -61,7 +76,7 @@ const Sidebar = () => {
                             {/* Analytics  */}
                             <NavLink
                                 to="/analytics"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
                                 <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Analytics">
@@ -80,7 +95,7 @@ const Sidebar = () => {
                             {/* Categories  */}
                             <NavLink
                                 to="/categories"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
                                 <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Categories">
@@ -99,7 +114,7 @@ const Sidebar = () => {
                             {/* Reports  */}
                             <NavLink
                                 to="/reports"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
                                 <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Reports">
@@ -116,13 +131,13 @@ const Sidebar = () => {
                             {/* Wallets */}
                             <NavLink
                                 to="/wallets"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
-                               <li>
+                                <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Wallets">
 
                                         {/* Wallets icon */}
-                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="my-1.5 inline-block w-4 h-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="my-1.5 inline-block w-4 h-4">
                                             <path d="M2 7h20v12H2z" />
                                             <path d="M2 7l4-4h12l4 4" />
                                             <circle cx="18" cy="13" r="1" />
@@ -134,7 +149,7 @@ const Sidebar = () => {
                             {/* Notifications  */}
                             <NavLink
                                 to="/notifications"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
                                 <li>
                                     <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Notifications">
@@ -148,17 +163,17 @@ const Sidebar = () => {
                             </NavLink>
 
                             {/* List item */}
-                               <NavLink
+                            <NavLink
                                 to="/settings"
-                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`}
+                                className={({ isActive }) => `flex items-center gap-2 p-2 rounded hover:bg-gray-200 hover:text-black ${isActive ? "text-white bg-primary font-bold p-2" : ""}`}
                             >
-                            <li>
-                                <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
-                                    {/* Settings icon */}
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
-                                    <span className="is-drawer-close:hidden">Settings</span>
-                                </button>
-                            </li>
+                                <li>
+                                    <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
+                                        {/* Settings icon */}
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+                                        <span className="is-drawer-close:hidden">Settings</span>
+                                    </button>
+                                </li>
                             </NavLink>
                         </ul>
                     </div>
