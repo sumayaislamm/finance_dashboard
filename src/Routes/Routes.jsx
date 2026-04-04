@@ -7,8 +7,8 @@ import Analytics from "../pages/Analytics/Analytics";
 import Categories from "../pages/Categories/Categories";
 import Reports from "../pages/Reports/Reports";
 import Wallets from "../pages/Wallets/Wallets";
-import Notifications from "../pages/Notifications/Notifications";
 import Settings from "../pages/Settings/Settings";
+import Notifications from "../pages/Notifications/Notifications";
 
 export const router = createBrowserRouter([
   {

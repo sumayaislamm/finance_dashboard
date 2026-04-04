@@ -47,33 +47,33 @@ const Reports = () => {
     const monthlyReports = Object.values(monthlyData);
 
     // ================= GROUP BY WEEK =================
-    const getWeekNumber = (date) => {
-        const d = new Date(date);
-        const oneJan = new Date(d.getFullYear(), 0, 1);
-        return Math.ceil(((d - oneJan) / 86400000 + oneJan.getDay() + 1) / 7);
-    };
+    // const getWeekNumber = (date) => {
+    //     const d = new Date(date);
+    //     const oneJan = new Date(d.getFullYear(), 0, 1);
+    //     return Math.ceil(((d - oneJan) / 86400000 + oneJan.getDay() + 1) / 7);
+    // };
 
-    const weeklyData = transactions.reduce((acc, t) => {
-        const week = getWeekNumber(t.date || new Date());
+    // const weeklyData = transactions.reduce((acc, t) => {
+    //     const week = getWeekNumber(t.date || new Date());
 
-        if (!acc[week]) {
-            acc[week] = {
-                week,
-                income: 0,
-                expense: 0,
-            };
-        }
+    //     if (!acc[week]) {
+    //         acc[week] = {
+    //             week,
+    //             income: 0,
+    //             expense: 0,
+    //         };
+    //     }
 
-        if (t.type === "income") {
-            acc[week].income += t.amount;
-        } else {
-            acc[week].expense += t.amount;
-        }
+    //     if (t.type === "income") {
+    //         acc[week].income += t.amount;
+    //     } else {
+    //         acc[week].expense += t.amount;
+    //     }
 
-        return acc;
-    }, {});
+    //     return acc;
+    // }, {});
 
-    const weeklyReports = Object.values(weeklyData);
+    // const weeklyReports = Object.values(weeklyData);
 
     // ================= EXPORT CSV =================
     const exportCSV = () => {
@@ -175,7 +175,7 @@ const Reports = () => {
             </div>
 
             {/* ================= WEEKLY REPORT ================= */}
-            <div className="bg-base-200 p-4 rounded-xl shadow">
+            {/* <div className="bg-base-200 p-4 rounded-xl shadow">
                 <h3 className="font-semibold mb-3">Weekly Report</h3>
 
                 {weeklyReports.map((w, i) => (
@@ -185,7 +185,7 @@ const Reports = () => {
                         <span className="text-red-500">-${w.expense}</span>
                     </div>
                 ))}
-            </div>
+            </div> */}
 
         </div>
     );

@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
+// ✅ Create context
 const TransactionContext = createContext();
 
 export const TransactionProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Load transactions from localStorage or mockdata.json
   useEffect(() => {
     const stored = localStorage.getItem("transactions");
 
@@ -14,13 +16,18 @@ export const TransactionProvider = ({ children }) => {
       setLoading(false);
     } else {
       fetch("/mockdata.json")
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           setTransactions(data.transactions);
           setLoading(false);
         });
     }
   }, []);
+
+  // ✅ Save to localStorage whenever transactions change
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }, [transactions]);
 
   return (
     <TransactionContext.Provider value={{ transactions, setTransactions, loading }}>
@@ -29,4 +36,5 @@ export const TransactionProvider = ({ children }) => {
   );
 };
 
+// ✅ Custom hook to use the context
 export const useTransactions = () => useContext(TransactionContext);

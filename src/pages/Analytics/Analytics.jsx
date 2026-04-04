@@ -91,11 +91,11 @@ const Analytics = () => {
 
     let change = 0;
 
+
     if (prevMonth && prevMonth.expense !== 0) {
-        change = (
-            ((currentMonth.expense - prevMonth.expense) / prevMonth.expense) *
-            100
-        ).toFixed(1);
+        // Positive change = expenses decreased (good), negative = expenses increased (bad)
+        change = ((prevMonth.expense - currentMonth.expense) / prevMonth.expense) * 100;
+        change = change.toFixed(1); // optional: round to 1 decimal
     }
 
     // sepending catagory top 3 
@@ -122,11 +122,11 @@ const Analytics = () => {
                 <h2 className="text-2xl text-primary font-bold mb-3 p-4">
                     Deep Financial Analysis
                 </h2>
-                <p className="text-xs text-base-content font-medium p-4 mb-5">This analytics page provides an in-depth and intelligent overview 
-                    of your financial performance through advanced insights and dynamic visualizations. It highlights key metrics such as your highest 
-                    spending category, top categories, and month-to-month changes, helping you quickly understand your financial behavior. The interactive 
-                    area chart presents a clear comparison of income and expenses over time, allowing you to track trends and fluctuations across months and years. 
-                    Additionally, smart insights and performance indicators guide you in evaluating your financial health, identifying spending patterns, and making 
+                <p className="text-xs text-base-content font-medium p-4 mb-5">This analytics page provides an in-depth and intelligent overview
+                    of your financial performance through advanced insights and dynamic visualizations. It highlights key metrics such as your highest
+                    spending category, top categories, and month-to-month changes, helping you quickly understand your financial behavior. The interactive
+                    area chart presents a clear comparison of income and expenses over time, allowing you to track trends and fluctuations across months and years.
+                    Additionally, smart insights and performance indicators guide you in evaluating your financial health, identifying spending patterns, and making
                     data-driven decisions with confidence and clarity.</p>
 
             </div>
@@ -164,11 +164,12 @@ const Analytics = () => {
                     </p>
 
                     {/* Dynamic message based on performance */}
-                    <p className={`mt-2 text-sm font-medium ${change > 0 ? "text-green-600" : change < 0 ? "text-red-600" : "text-gray-600"}`}>
-                        {change > 0
-                            ? "Great! Your finances improved this month."
-                            : change < 0
-                                ? "Caution! Expenses exceeded income this month."
+                    <p className={`mt-2 text-sm font-medium ${change < 0 ? "text-green-600" : change > 0 ? "text-red-600" : "text-gray-600"
+                        }`}>
+                        {change < 0
+                            ? "Great! Your expenses decreased this month."
+                            : change > 0
+                                ? "Caution! Expenses increased this month."
                                 : "No significant change compared to last month."}
                     </p>
                 </div>
@@ -177,7 +178,7 @@ const Analytics = () => {
 
                 {/* Top Categories */}
                 <div className="bg-base-200 p-4 text-center rounded-xl shadow">
-                    <h3 className="font-semibold mb-2">Top Categories</h3>
+                    <h3 className="font-semibold mb-2">Top Categories of Expenses</h3>
 
                     {topCategories.map((c, i) => (
                         <p key={i} className="flex justify-between items-center px-30">

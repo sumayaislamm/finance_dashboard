@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { FaTwitter } from "react-icons/fa";
+import Notifications from '../../pages/Notifications/Notifications';
 
 const Sidebar = () => {
     return (
@@ -10,7 +11,7 @@ const Sidebar = () => {
                 <div className="drawer-content">
                     {/* Navbar */}
                     <nav className="navbar w-full flex justify-between bg-base-300 px-5">
-                        
+
                         <label htmlFor="my-drawer-4" aria-label="open sidebar" className="btn btn-square btn-ghost bg-base-300 text-primary font-bold">
                             {/* Sidebar toggle icon */}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4" ><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>
@@ -36,6 +37,7 @@ const Sidebar = () => {
                     <div className="p-4">
 
                         <Outlet></Outlet>
+                        <Notifications />
                     </div>
                 </div>
 
@@ -54,7 +56,7 @@ const Sidebar = () => {
                                 <button
                                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right 
             flex items-center gap-2"
-                                    
+
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +195,8 @@ const Sidebar = () => {
                                         {/* Notifications icon */}
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="my-1.5 inline-block w-4 h-4">
                                             <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 1 0-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0a3 3 0 1 1-6 0h6z" />
-                                        </svg> <span className="is-drawer-close:hidden">Notifications</span>
+                                        </svg> <span className="is-drawer-close:hidden">Notifications <div className="badge badge-sm badge-secondary">+99</div></span>
+                                       
                                     </button>
                                 </li>
                             </NavLink>

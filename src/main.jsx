@@ -5,17 +5,20 @@ import { RouterProvider } from "react-router/dom";
 import { router } from "./Routes/Routes";
 import { RoleProvider } from './context/RoleContext';
 import { TransactionProvider } from './context/TransactionContext';
+import { NotificationProvider } from './context/NotificationContext';
 
 
 
 
 createRoot(document.getElementById('root')).render(
 
-  <StrictMode>
+<StrictMode>
+  <NotificationProvider>
     <RoleProvider>
       <TransactionProvider>
         <RouterProvider router={router} />
       </TransactionProvider>
     </RoleProvider>
-  </StrictMode>
+  </NotificationProvider>
+</StrictMode>
 )

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRole } from "../../context/RoleContext";
 import { useTransactions } from "../../context/TransactionContext";
 import Loading from "../Loading/Loading";
+import { useNotification } from "../../context/NotificationContext";
 
 const Transactions = () => {
     const { role } = useRole();
@@ -9,6 +10,7 @@ const Transactions = () => {
     const [search, setSearch] = useState("");
     const [typeFilter, setTypeFilter] = useState("all");
     const [sort, setSort] = useState("latest");
+    const { showNotification } = useNotification();
 
     const [form, setForm] = useState({
         id: null,
@@ -55,10 +57,11 @@ const Transactions = () => {
             ...form,
             id: Date.now(),
             amount: Number(form.amount),
-            year: Number(form.year), // ✅ added
+            year: Number(form.year), 
         };
 
         setTransactions([...transactions, newData]);
+        showNotification("Transaction Added ✅", "/transactions");
         resetForm();
     };
 
@@ -75,12 +78,14 @@ const Transactions = () => {
         );
 
         setTransactions(updated);
+        showNotification("Transaction Updated ✏️", "/transactions");
         resetForm();
     };
 
     const handleDelete = (id) => {
         if (confirm("Are you sure you want to delete?")) {
             setTransactions(transactions.filter((t) => t.id !== id));
+            showNotification("Transaction Deleted ❌", "/transactions");
         }
     };
 
@@ -160,7 +165,7 @@ const Transactions = () => {
                 <table className="table table-xs">
                     <thead>
                         <tr className="bg-base-300 text-center">
-                            <th>Date</th>
+                            <th>Month</th>
                             <th>Year</th>
                             <th>Category</th>
                             <th>Amount</th>
