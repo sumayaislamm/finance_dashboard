@@ -1,5 +1,4 @@
 import React from "react";
-import mockdata from "../../../public/mockdata.json";
 import {
     PieChart,
     Pie,
@@ -13,13 +12,88 @@ import {
     YAxis,
     CartesianGrid,
 } from "recharts";
+
 import { useRole } from "../../context/RoleContext";
+import { useTransactions } from "../../context/TransactionContext";
+import Loading from "../Loading/Loading";
 import { Link } from "react-router";
 
 const Dashboard = () => {
-     const { role } = useRole();
-    const pieData = mockdata.spendingByCategory;
-    const lineData = mockdata.balanceTrend;
+    const { role } = useRole();
+    const { transactions, loading } = useTransactions();
+
+    // loading 
+    if (loading) {
+        return <Loading />;
+    }
+
+    // Total calculations
+    const totalIncome = transactions
+        .filter((t) => t.type === "income")
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpense = transactions
+        .filter((t) => t.type === "expense")
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalBalance = totalIncome - totalExpense;
+
+    // Pie Chart data
+    const pieData = transactions
+        .filter((t) => t.type === "expense")
+        .reduce((acc, t) => {
+            const existing = acc.find((e) => e.category === t.category);
+            if (existing) existing.amount += t.amount;
+            else acc.push({ category: t.category, amount: t.amount });
+            return acc;
+        }, []);
+
+    // Line Chart data
+
+
+    const monthOrder = [
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+    ];
+
+    // ✅ Group by Month + Year
+    const groupedData = transactions.reduce((acc, t) => {
+        const key = `${t.year}-${t.month}`;
+
+        if (!acc[key]) {
+            acc[key] = {
+                month: t.month,
+                year: t.year,
+                income: 0,
+                expense: 0,
+            };
+        }
+
+        if (t.type === "income") {
+            acc[key].income += t.amount;
+        } else {
+            acc[key].expense += t.amount;
+        }
+
+        return acc;
+    }, {});
+
+    // Convert to array + sort
+    const sortedData = Object.values(groupedData).sort((a, b) => {
+        if (a.year === b.year) {
+            return monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month);
+        }
+        return a.year - b.year;
+    });
+
+    // ✅ Final line data
+    const lineData = sortedData.map((m) => ({
+        month: `${m.month.slice(0, 3)} ${m.year}`, // 👉 Jan 2025
+        income: m.income,
+        expense: m.expense,
+        balance: m.income - m.expense,
+    }));
 
     const colors = ["#60a5fa", "#facc15", "#f87171", "#34d399"];
 
@@ -44,41 +118,51 @@ const Dashboard = () => {
             </div>
 
             <div className="flex flex-col md:flex-row gap-6">
-                {/* Left Column */}
+                {/* LEFT */}
                 <div className="w-full md:w-1/2 flex flex-col gap-6">
+
                     {/* Summary */}
-                    <div className="">
+                    <div>
                         <h2 className="text-center text-lg font-semibold pb-2">
                             Financial Summary
                         </h2>
 
-                        <div className=" stats bg-base-100 flex justify-center border-base-300 border">
+                        <div className="stats bg-base-100 flex justify-center border-base-300 border">
                             <div className="stat">
                                 <div className="stat-title font-bold">Account balance</div>
-                                <div className="stat-value">${mockdata.summary.totalBalance}</div>
+                                <div className="stat-value">${totalBalance}</div>
+
                                 {role === "Admin" && (
-                                    <Link className=" text-center" to="/transactions">
-                                        <button className="btn btn-xs bg-primary text-base-300">Add Balance</button>
+                                    <Link to="/transactions">
+                                        <button className="btn btn-xs bg-primary text-base-300">
+                                            Add Balance
+                                        </button>
                                     </Link>
                                 )}
                             </div>
 
                             <div className="stat">
                                 <div className="stat-title font-bold">Income</div>
-                                <div className="stat-value">${mockdata.summary.totalIncome}</div>
+                                <div className="stat-value">${totalIncome}</div>
+
                                 {role === "Admin" && (
-                                    <Link className=" text-center" to="/transactions">
-                                        <button className="btn btn-xs bg-primary text-base-300">Add Income</button>
+                                    <Link to="/transactions">
+                                        <button className="btn btn-xs bg-primary text-base-300">
+                                            Add Income
+                                        </button>
                                     </Link>
                                 )}
                             </div>
 
                             <div className="stat">
                                 <div className="stat-title font-bold">Expenses</div>
-                                <div className="stat-value">${mockdata.summary.totalExpense}</div>
+                                <div className="stat-value">${totalExpense}</div>
+
                                 {role === "Admin" && (
-                                    <Link className=" text-center" to="/transactions">
-                                        <button className="btn btn-xs bg-primary text-base-300">Add Expenses</button>
+                                    <Link to="/transactions">
+                                        <button className="btn btn-xs bg-primary text-base-300">
+                                            Add Expenses
+                                        </button>
                                     </Link>
                                 )}
                             </div>
@@ -101,14 +185,10 @@ const Dashboard = () => {
                                         cx="50%"
                                         cy="50%"
                                         outerRadius={90}
-                                        fill="#8884d8"
                                         label
                                     >
                                         {pieData.map((entry, index) => (
-                                            <Cell
-                                                key={index}
-                                                fill={colors[index % colors.length]}
-                                            />
+                                            <Cell key={index} fill={colors[index % colors.length]} />
                                         ))}
                                     </Pie>
 
@@ -119,8 +199,8 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-                {/* Right Side  */}
-                {/* Line Chart */}
+
+                {/* RIGHT */}
                 <div className="w-full md:w-1/2 flex flex-col gap-4">
                     <div className="card bg-base-200 p-3 md:p-4 shadow rounded-xl">
                         <h2 className="text-center text-lg font-semibold mb-3">
@@ -129,47 +209,20 @@ const Dashboard = () => {
 
                         <div className="w-full h-80 md:h-96">
                             <ResponsiveContainer>
-                                <LineChart
-                                    data={lineData} // balanceTrend with income & expense
-                                    margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
-                                >
+                                <LineChart data={lineData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="month" />
                                     <YAxis />
                                     <Tooltip />
-                                    <Legend verticalAlign="top" height={36} />
+                                    <Legend />
 
-                                    <Line
-                                        type="monotone"
-                                        dataKey="balance"
-                                        stroke="#8884d8"
-                                        strokeWidth={2}
-                                        dot={{ r: 4 }}
-                                        name="Balance"
-                                    />
-
-                                    <Line
-                                        type="monotone"
-                                        dataKey="income"
-                                        stroke="#34d399"
-                                        strokeWidth={2}
-                                        dot={{ r: 4 }}
-                                        name="Income"
-                                    />
-
-                                    <Line
-                                        type="monotone"
-                                        dataKey="expense"
-                                        stroke="#f87171"
-                                        strokeWidth={2}
-                                        dot={{ r: 4 }}
-                                        name="Expense"
-                                    />
+                                    <Line type="monotone" dataKey="balance" stroke="#8884d8" />
+                                    <Line type="monotone" dataKey="income" stroke="#34d399" />
+                                    <Line type="monotone" dataKey="expense" stroke="#f87171" />
                                 </LineChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
-
                     {/* Explanation Section */}
                     <div className="card bg-base-100 p-3 md:p-4 shadow rounded-xl">
                         <h3 className="text-md font-semibold mb-2">How to read this Line chart:</h3>

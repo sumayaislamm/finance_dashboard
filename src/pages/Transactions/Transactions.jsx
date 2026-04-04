@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRole } from "../../context/RoleContext";
+import { useTransactions } from "../../context/TransactionContext";
+import Loading from "../Loading/Loading";
 
 const Transactions = () => {
     const { role } = useRole();
-    const [transactions, setTransactions] = useState([]);
+    const { transactions, setTransactions, loading } = useTransactions();
     const [search, setSearch] = useState("");
     const [typeFilter, setTypeFilter] = useState("all");
     const [sort, setSort] = useState("latest");
@@ -19,24 +21,10 @@ const Transactions = () => {
 
     const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        const stored = localStorage.getItem("transactions");
 
-        if (stored && JSON.parse(stored).length > 0) {
-            setTransactions(JSON.parse(stored));
-        } else {
-            fetch("/mockdata.json")
-                .then((res) => res.json())
-                .then((data) => {
-                    setTransactions(data.transactions);
-                });
-        }
-    }, []);
-    useEffect(() => {
-        if (transactions.length > 0) {
-            localStorage.setItem("transactions", JSON.stringify(transactions));
-        }
-    }, [transactions]);
+    if (loading) {
+        return <Loading />;
+    }
 
     const filteredTransactions = transactions.filter((t) => {
         const matchSearch = (t.category || "")

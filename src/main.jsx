@@ -1,17 +1,21 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { RouterProvider } from "react-router/dom";
 import { router } from "./Routes/Routes";
 import { RoleProvider } from './context/RoleContext';
+import { TransactionProvider } from './context/TransactionContext';
 
 
 
 
 createRoot(document.getElementById('root')).render(
+
   <StrictMode>
     <RoleProvider>
-      <RouterProvider router={router} />
+      <TransactionProvider>
+        <RouterProvider router={router} />
+      </TransactionProvider>
     </RoleProvider>
   </StrictMode>
 )
