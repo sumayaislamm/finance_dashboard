@@ -115,9 +115,9 @@ const Dashboard = () => {
         (a, b) => b[1] - a[1]
     )[0];
     return (
-        <div className="p-3 md:p-6 bg-base-100 min-h-screen">
+        <div className="p-3 md:p-6 bg-base-100 min-h-screen page-slide-in-left">
             <div className="text-center">
-                <h1 className="text-2xl text-primary font-bold mb-3 p-4">
+                <h1 className="text-2xl text-primary font-bold mb-3 p-4 ">
                     Dashboard Overview
                 </h1>
 

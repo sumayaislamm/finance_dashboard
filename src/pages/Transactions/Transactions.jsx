@@ -122,7 +122,7 @@ const Transactions = () => {
 
 
     return (
-        <div className="p-6">
+        <div className="p-6 page-slide-in-left">
             <div className="text-center">
                 <h1 className="text-2xl text-primary font-bold p-4">
                     Financial Transactions

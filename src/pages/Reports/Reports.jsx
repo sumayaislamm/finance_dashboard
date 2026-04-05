@@ -86,7 +86,7 @@ const Reports = () => {
     };
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 page-slide-in-left">
 
             <h2 className="text-2xl font-bold text-center">
                 Financial Reports

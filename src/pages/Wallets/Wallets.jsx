@@ -19,7 +19,7 @@ const Wallets = () => {
     });
 
     return (
-        <div className="p-4">
+        <div className="p-4 page-slide-in-left">
             {/* Wallet Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {walletsWithBalance.map((wallet) => (

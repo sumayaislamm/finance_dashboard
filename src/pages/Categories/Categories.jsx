@@ -40,7 +40,7 @@ const Categories = () => {
             const percent = total > 0 ? (c.amount / total) * 100 : 0;
 
             return (
-                <div key={index} className="mb-4">
+                <div key={index} className="mb-4 ">
                     <div className="flex justify-between mb-1">
                         <span className="font-semibold">{c.category}</span>
                         <span className="text-sm">
@@ -67,7 +67,7 @@ const Categories = () => {
     };
 
     return (
-        <div className="p-6 space-y-10">
+        <div className="p-6 space-y-10 page-slide-in-left">
             <div className="text-center">
                 <h2 className="text-2xl text-primary font-bold mb-3 p-4">
                     Income & Expense Breakdown 

@@ -4,7 +4,7 @@ import { useRole } from '../../context/RoleContext';
 const Settings = () => {
     const { role, setRole } = useRole();
     return (
-        <div className="">
+        <div className="page-slide-in-left">
             <h2 className="text-xl font-bold mb-4 bg-primary text-base-300 p-5 text-center rounded-field">Role Settings</h2>
 
          

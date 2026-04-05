@@ -2,7 +2,7 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 p-6 gap-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 p-6 gap-6 page-slide-in-left">
       <div className="flex w-100 flex-col gap-4">
         <div className="flex items-center gap-4">
           <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>

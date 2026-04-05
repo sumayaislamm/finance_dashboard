@@ -118,8 +118,8 @@ const Insights = () => {
     }));
 
     return (
-        <>
-            <div className="text-center">
+        <div className="page-slide-in-left">
+            <div className="text-center ">
                 <h2 className="text-2xl text-primary font-bold mb-3 p-4">
                     Financial Insights & Trends
                 </h2>
@@ -262,7 +262,7 @@ const Insights = () => {
                 </div>
 
             </div>
-        </>
+        </div>
     );
 };
 
