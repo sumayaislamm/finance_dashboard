@@ -1,129 +1,109 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useWallet } from "../../context/WalletContext";
+import { useTransactions } from "../../context/TransactionContext";
+import { Link } from "react-router";
+import { useRole } from "../../context/RoleContext";
 
-// Load initial transactions
-const initialTransactions = JSON.parse(localStorage.getItem("transactions")) || [];
+const Wallets = () => {
+    const { wallets } = useWallet();
+    const { transactions } = useTransactions();
+    const { role } = useRole();
 
-const Wallet = () => {
-    const [wallets, setWallets] = useState([]);
-    const [walletName, setWalletName] = useState("");
-    const [transactions, setTransactions] = useState(initialTransactions);
-
-    // Load wallets from localStorage
-    useEffect(() => {
-        const saved = localStorage.getItem("wallets");
-        if (saved) setWallets(JSON.parse(saved));
-    }, []);
-
-    // Persist wallets to localStorage
-    useEffect(() => {
-        localStorage.setItem("wallets", JSON.stringify(wallets));
-    }, [wallets]);
-
-    // Persist transactions to localStorage
-    useEffect(() => {
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-    }, [transactions]);
-
-    // Add a new wallet
-    const handleAddWallet = () => {
-        if (!walletName.trim()) return alert("Enter wallet name");
-
-        const newWallet = {
-            id: Date.now(),
-            name: walletName.trim(),
-            color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`, // random color for card
-        };
-
-        setWallets([...wallets, newWallet]);
-        setWalletName("");
-    };
-
-    // Delete a wallet
-    const handleDeleteWallet = (id) => {
-        if (!confirm("Are you sure?")) return;
-        setWallets(wallets.filter((w) => w.id !== id));
-        setTransactions(transactions.filter((t) => t.walletId !== id));
-    };
-
-    // Calculate balance and total income/expense
-    const getWalletSummary = (wallet) => {
+    // Calculate balance for each wallet dynamically
+    const walletsWithBalance = wallets.map((wallet) => {
         const walletTx = transactions.filter((t) => t.walletId === wallet.id);
-        const income = walletTx
-            .filter((t) => t.type === "income")
-            .reduce((sum, t) => sum + t.amount, 0);
-        const expense = walletTx
-            .filter((t) => t.type === "expense")
-            .reduce((sum, t) => sum + t.amount, 0);
-        const balance = income - expense;
-
-        return { balance, income, expense };
-    };
+        const balance = walletTx.reduce((sum, t) => {
+            return t.type === "income" ? sum + t.amount : sum - t.amount;
+        }, 0);
+        return { ...wallet, balance, history: walletTx };
+    });
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h2 className="text-3xl font-bold mb-6">Wallets Dashboard</h2>
-
-            {/* Add Wallet */}
-            <div className="mb-6 flex gap-3">
-                <input
-                    type="text"
-                    placeholder="New wallet name"
-                    value={walletName}
-                    onChange={(e) => setWalletName(e.target.value)}
-                    className="flex-1 p-2 rounded border border-gray-300"
-                />
-                <button
-                    onClick={handleAddWallet}
-                    className="bg-blue-600 text-white px-4 rounded font-semibold"
-                >
-                    Add Wallet
-                </button>
-            </div>
-
+        <div className="p-4">
             {/* Wallet Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {wallets.length === 0 && (
-                    <p className="text-gray-500 col-span-full">
-                        No wallets yet. Add one to get started.
-                    </p>
-                )}
-
-                {wallets.map((w) => {
-                    const { balance, income, expense } = getWalletSummary(w);
-
-                    return (
-                        <div
-                            key={w.id}
-                            className="relative p-5 rounded-xl shadow-lg text-white"
-                            style={{ backgroundColor: w.color }}
-                        >
-                            <h3 className="text-xl font-semibold mb-3">{w.name}</h3>
-                            <p className="text-lg mb-1">Balance: <span className="font-bold">{balance} BDT</span></p>
-                            <p className="text-sm">Income: {income} BDT</p>
-                            <p className="text-sm mb-3">Expense: {expense} BDT</p>
-
-                            <button
-                                onClick={() => handleDeleteWallet(w.id)}
-                                className="absolute top-3 right-3 bg-white text-red-600 px-2 rounded font-bold text-sm"
-                            >
-                                Delete
-                            </button>
-
-                            {/* Optional: add quick action buttons */}
-                            <div className="flex gap-2 mt-3">
-                                <button className="bg-white text-black px-3 py-1 rounded text-sm font-medium">
-                                    Add Transaction
-                                </button>
-                                <button className="bg-white text-black px-3 py-1 rounded text-sm font-medium">
-                                    View Transactions
-                                </button>
-                            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {walletsWithBalance.map((wallet) => (
+                    <div
+                        key={wallet.id}
+                        className="p-4 rounded-xl shadow-md flex flex-col justify-between"
+                        style={{ backgroundColor: wallet.color }}
+                    >
+                        <div className="text-center">
+                            <h3 className="text-xl font-semibold text-white">{wallet.name}</h3>
+                            <p className="text-white mb-2">{wallet.number}</p>
+                            <p className="text-white font-bold text-2xl">
+                                Balance: {wallet.balance} BDT
+                            </p>
                         </div>
-                    );
-                })}
+                        {role === "Admin" && (
+                            <div className="flex justify-center gap-4 mt-4">
+                                <Link to="/transactions">
+                                    <button
+                                        className="btn btn-xs bg-base-content shadow-none border-0 text-base-300"
+                                    >
+                                        Withdraw
+                                    </button>
+                                </Link>
+                                <Link to="/transactions">
+                                    <button
+                                        className="btn btn-xs bg-base-content shadow-none border-0 text-base-300"
+                                    >
+                                        Add Money
+                                    </button>
+                                </Link>
+
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
+
+
+            {walletsWithBalance.map((wallet) => (
+                <div key={wallet.id} className="mb-6">
+                    <h4 className="font-bold mb-2 bg-primary text-lg text-base-300 py-5 text-center uppercase">{wallet.name} History:</h4>
+                    <div className="overflow-x-auto max-h-96 w-full border rounded-lg">
+                        <table className="table-auto w-full text-sm text-left">
+                            <thead className="bg-base-300 sticky top-0">
+                                <tr>
+                                    <th className="px-2 py-1">#</th>
+                                    <th className="px-2 py-1">Category</th>
+                                    <th className="px-2 py-1">Type</th>
+                                    <th className="px-2 py-1">Amount (BDT)</th>
+                                    <th className="px-2 py-1">Month</th>
+                                    <th className="px-2 py-1">Year</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {wallet.history.length > 0 ? (
+                                    wallet.history.map((t, idx) => (
+                                        <tr key={t.id} className="border-b">
+                                            <td className="px-2 py-1">{idx + 1}</td>
+                                            <td className="px-2 py-1">{t.category}</td>
+                                            <td className="px-2 py-1">
+                                                <span className={t.type === "income" ? "text-green-500" : "text-red-500"}>
+                                                    {t.type.charAt(0).toUpperCase() + t.type.slice(1)}
+                                                </span>
+                                            </td>
+                                            <td className="px-2 py-1">{t.amount}</td>
+                                            <td className="px-2 py-1">{t.month}</td>
+                                            <td className="px-2 py-1">{t.year}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={6} className="text-center py-4 text-gray-500">
+                                            No transactions yet.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            ))}
         </div>
     );
 };
 
-export default Wallet;
+export default Wallets;

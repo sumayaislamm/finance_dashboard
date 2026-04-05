@@ -5,20 +5,28 @@ import { RouterProvider } from "react-router/dom";
 import { router } from "./Routes/Routes";
 import { RoleProvider } from './context/RoleContext';
 import { TransactionProvider } from './context/TransactionContext';
-import { NotificationProvider } from './context/NotificationContext';
+import { WalletProvider } from './context/WalletContext';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
 
 createRoot(document.getElementById('root')).render(
 
-<StrictMode>
-  <NotificationProvider>
-    <RoleProvider>
-      <TransactionProvider>
-        <RouterProvider router={router} />
-      </TransactionProvider>
-    </RoleProvider>
-  </NotificationProvider>
-</StrictMode>
+  <StrictMode>
+      <RoleProvider>
+        <TransactionProvider>
+          <WalletProvider>
+            <RouterProvider router={router} />
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              theme="colored"
+            />
+          </WalletProvider>
+        </TransactionProvider>
+
+      </RoleProvider>
+  </StrictMode>
 )

@@ -11,7 +11,7 @@ const Reports = () => {
         return <Loading />;
     }
 
-    // ================= SUMMARY =================
+    //    Summary calculations
     const totalIncome = transactions
         .filter(t => t.type === "income")
         .reduce((sum, t) => sum + t.amount, 0);
@@ -46,36 +46,9 @@ const Reports = () => {
 
     const monthlyReports = Object.values(monthlyData);
 
-    // ================= GROUP BY WEEK =================
-    // const getWeekNumber = (date) => {
-    //     const d = new Date(date);
-    //     const oneJan = new Date(d.getFullYear(), 0, 1);
-    //     return Math.ceil(((d - oneJan) / 86400000 + oneJan.getDay() + 1) / 7);
-    // };
 
-    // const weeklyData = transactions.reduce((acc, t) => {
-    //     const week = getWeekNumber(t.date || new Date());
 
-    //     if (!acc[week]) {
-    //         acc[week] = {
-    //             week,
-    //             income: 0,
-    //             expense: 0,
-    //         };
-    //     }
-
-    //     if (t.type === "income") {
-    //         acc[week].income += t.amount;
-    //     } else {
-    //         acc[week].expense += t.amount;
-    //     }
-
-    //     return acc;
-    // }, {});
-
-    // const weeklyReports = Object.values(weeklyData);
-
-    // ================= EXPORT CSV =================
+    // Exporting the CSV file
     const exportCSV = () => {
         const headers = ["Type", "Amount", "Category", "Month", "Year"];
 
@@ -97,9 +70,10 @@ const Reports = () => {
         link.setAttribute("download", "reports.csv");
         document.body.appendChild(link);
         link.click();
+
     };
 
-    // ================= EXPORT JSON =================
+    // Exporting the JSON file
     const exportJSON = () => {
         const json = JSON.stringify(transactions, null, 2);
         const blob = new Blob([json], { type: "application/json" });
@@ -118,38 +92,38 @@ const Reports = () => {
                 Financial Reports
             </h2>
 
-            {/* ================= SUMMARY ================= */}
+            {/* Summary  */}
             <div className="grid md:grid-cols-3 gap-4">
                 <div className="bg-base-200 p-4 rounded-xl shadow text-center">
-                    <h3 className="text-green-500 font-semibold">Income</h3>
+                    <h3 className="text-green-500 font-semibold">INCOME</h3>
                     <p className="text-xl font-bold">${totalIncome}</p>
                 </div>
 
                 <div className="bg-base-200 p-4 rounded-xl shadow text-center">
-                    <h3 className="text-red-500 font-semibold">Expense</h3>
+                    <h3 className="text-red-500 font-semibold">EXPENSE</h3>
                     <p className="text-xl font-bold">${totalExpense}</p>
                 </div>
 
                 <div className="bg-base-200 p-4 rounded-xl shadow text-center">
-                    <h3 className="text-primary font-semibold">Balance</h3>
+                    <h3 className="text-primary font-semibold">BALANCE</h3>
                     <p className="text-xl font-bold">${balance}</p>
                 </div>
             </div>
 
-            {/* ================= EXPORT BUTTONS ================= */}
+            {/* Export Button  */}
             {role === "Admin" && (
                 <div className="flex gap-4 justify-center">
-                    <button onClick={exportCSV} className="btn btn-primary">
+                    <button onClick={exportCSV} className="btn btn-primary text-base-300">
                         Export CSV
                     </button>
 
-                    <button onClick={exportJSON} className="btn btn-secondary">
+                    <button onClick={exportJSON} className="btn bg-green-500 text-base-300">
                         Export JSON
                     </button>
                 </div>
             )}
 
-            {/* ================= MONTHLY REPORT ================= */}
+            {/* MOnthly Report */}
             <div className="bg-base-200 p-4 rounded-xl shadow">
                 <h3 className="font-semibold mb-3">Monthly Report</h3>
 
@@ -174,18 +148,6 @@ const Reports = () => {
                 ))}
             </div>
 
-            {/* ================= WEEKLY REPORT ================= */}
-            {/* <div className="bg-base-200 p-4 rounded-xl shadow">
-                <h3 className="font-semibold mb-3">Weekly Report</h3>
-
-                {weeklyReports.map((w, i) => (
-                    <div key={i} className="flex justify-between py-2 border-b">
-                        <span>Week {w.week}</span>
-                        <span className="text-green-500">+${w.income}</span>
-                        <span className="text-red-500">-${w.expense}</span>
-                    </div>
-                ))}
-            </div> */}
 
         </div>
     );

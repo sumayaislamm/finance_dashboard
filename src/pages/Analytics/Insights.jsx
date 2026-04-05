@@ -12,7 +12,7 @@ import {
     CartesianGrid,
 } from "recharts";
 
-const Analytics = () => {
+const Insights = () => {
     const { transactions, loading } = useTransactions();
 
     if (loading) {
@@ -86,16 +86,17 @@ const Analytics = () => {
     });
 
     // Compare by month 
-    const currentMonth = monthlyComparison[monthlyComparison.length - 1];
-    const prevMonth = monthlyComparison[monthlyComparison.length - 2];
+    const currentMonth = monthlyComparison.at(-1);
+    const prevMonth = monthlyComparison.at(-2);
+
+    if (!currentMonth) return <p>No data available</p>;
 
     let change = 0;
 
 
-    if (prevMonth && prevMonth.expense !== 0) {
-        // Positive change = expenses decreased (good), negative = expenses increased (bad)
+    if (currentMonth && prevMonth && prevMonth.expense !== 0) {
         change = ((prevMonth.expense - currentMonth.expense) / prevMonth.expense) * 100;
-        change = change.toFixed(1); // optional: round to 1 decimal
+        change = change.toFixed(1);
     }
 
     // sepending catagory top 3 
@@ -120,7 +121,7 @@ const Analytics = () => {
         <>
             <div className="text-center">
                 <h2 className="text-2xl text-primary font-bold mb-3 p-4">
-                    Deep Financial Analysis
+                    Financial Insights & Trends
                 </h2>
                 <p className="text-xs text-base-content font-medium p-4 mb-5">This analytics page provides an in-depth and intelligent overview
                     of your financial performance through advanced insights and dynamic visualizations. It highlights key metrics such as your highest
@@ -181,7 +182,7 @@ const Analytics = () => {
                     <h3 className="font-semibold mb-2">Top Categories of Expenses</h3>
 
                     {topCategories.map((c, i) => (
-                        <p key={i} className="flex justify-between items-center px-30">
+                        <p key={i} className="flex justify-between items-center px-4 md:px-10">
                             <span className="font-bold text-sm text-primary">
                                 {c.category}
                             </span>
@@ -265,4 +266,4 @@ const Analytics = () => {
     );
 };
 
-export default Analytics;
+export default Insights;

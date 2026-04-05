@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useRole } from "../../context/RoleContext";
 import { useTransactions } from "../../context/TransactionContext";
 import Loading from "../Loading/Loading";
-import { useNotification } from "../../context/NotificationContext";
+import { useWallet } from "../../context/WalletContext.jsx";
+import { toast } from "react-toastify";
 
 const Transactions = () => {
     const { role } = useRole();
@@ -10,7 +11,7 @@ const Transactions = () => {
     const [search, setSearch] = useState("");
     const [typeFilter, setTypeFilter] = useState("all");
     const [sort, setSort] = useState("latest");
-    const { showNotification } = useNotification();
+    const { wallets } = useWallet();
 
     const [form, setForm] = useState({
         id: null,
@@ -19,6 +20,7 @@ const Transactions = () => {
         category: "",
         type: "expense",
         year: "",
+        walletId: null,
     });
 
     const [isEditing, setIsEditing] = useState(false);
@@ -48,58 +50,76 @@ const Transactions = () => {
     });
 
     const handleAdd = () => {
-        if (!form.amount || !form.category) {
-            alert("Please fill all fields");
+        if (!form.amount || !form.category || !form.year || !form.month || !form.type) {
+            toast.warning("Please fill all fields");
             return;
         }
+
 
         const newData = {
             ...form,
             id: Date.now(),
             amount: Number(form.amount),
-            year: Number(form.year), 
+            year: Number(form.year),
+            walletId: form.walletId || null,
         };
 
-        setTransactions([...transactions, newData]);
-        showNotification("Transaction Added ✅", "/transactions");
+
+        setTransactions(prev => [...prev, newData]);
+        toast.success("Transaction Added Successfully! ✅");
         resetForm();
     };
+
+
+
 
     const handleEdit = (t) => {
         setForm(t);
         setIsEditing(true);
+        document.getElementById("transaction-form")?.scrollIntoView({
+            behavior: "smooth",
+        });
+        toast.warning("Transaction Information Set To the Top Field! Check and Edit! ");
     };
 
     const handleUpdate = () => {
-        const updated = transactions.map((t) =>
-            t.id === form.id
-                ? { ...form, amount: Number(form.amount), year: Number(form.year) } // ✅ added
-                : t
+    
+
+
+        setTransactions(prev =>
+            prev.map(t =>
+                t.id === form.id
+                    ? { ...form, amount: Number(form.amount), year: Number(form.year) }
+                    : t
+            )
         );
 
-        setTransactions(updated);
-        showNotification("Transaction Updated ✏️", "/transactions");
+        toast.success("Transaction Updated Successfully! ✅");
         resetForm();
     };
 
     const handleDelete = (id) => {
         if (confirm("Are you sure you want to delete?")) {
-            setTransactions(transactions.filter((t) => t.id !== id));
-            showNotification("Transaction Deleted ❌", "/transactions");
+            setTransactions(prev =>
+                prev.filter(t => t.id !== id)
+            );
+            toast.error("Transaction deleted Successfully!");
         }
     };
 
     const resetForm = () => {
         setForm({
             id: null,
-            date: "",
+            month: "",
             amount: "",
             category: "",
             type: "expense",
             year: "",
+            walletId: null,
         });
         setIsEditing(false);
     };
+
 
     return (
         <div className="p-6">
@@ -107,6 +127,110 @@ const Transactions = () => {
                 <h1 className="text-2xl text-primary font-bold p-4">
                     Financial Transactions
                 </h1>
+
+            </div>
+            {/* admin form */}
+            {role === "Admin" && (
+                <div className="text-center gap-3 mb-4" id="transaction-form">
+                    <h1 className="text-xl text-base-300 bg-primary w-full p-3 font-bold my-5">
+                        Only Admins Can Manage Transactions
+                    </h1>
+
+                    <select
+                        value={form.month}
+                        onChange={(e) =>
+                            setForm({ ...form, month: e.target.value })
+                        }
+                        className="border p-2 mr-2"
+                    >
+                        <option value="">Select Month</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                    {/* Wallet Select */}
+                    <select
+                        value={form.walletId || ""}
+                        onChange={(e) =>
+                            setForm({ ...form, walletId: Number(e.target.value) })
+                        }
+                        className="border p-2 mr-2"
+                    >
+                        <option value="">No Wallet</option>
+                        {wallets.map(w => (
+                            <option key={w.id} value={w.id}>
+                                {w.name}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type="number"
+                        placeholder="Year"
+                        value={form.year}
+                        onChange={(e) =>
+                            setForm({ ...form, year: e.target.value })
+                        }
+                        className="border p-2 mr-2"
+                    />
+
+                    <input
+                        type="number"
+                        placeholder="Amount"
+                        value={form.amount}
+                        onChange={(e) =>
+                            setForm({ ...form, amount: e.target.value })
+                        }
+                        className="border p-2 mr-2"
+                    />
+
+                    <select
+                        value={form.category}
+                        onChange={(e) =>
+                            setForm({ ...form, category: e.target.value })
+                        }
+                        className="border p-2 mr-2"
+                    >
+                        <option value="">Select Category</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Investment">Investment</option>
+                        <option value="Groceries">Groceries</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Entertainment">Entertainment</option>
+                    </select>
+
+                    <select
+                        value={form.type}
+                        onChange={(e) =>
+                            setForm({ ...form, type: e.target.value })
+                        }
+                        className="border p-2 mr-2"
+                    >
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+
+                    <button
+                        onClick={isEditing ? handleUpdate : handleAdd}
+                        className="bg-primary btn text-base-300 px-10 py-2 mb-2 rounded"
+                    >
+                        {isEditing ? "Update" : "Add"}
+                    </button>
+                </div>
+            )}
+
+            {/* FILTERS */}
+            <div className="text-center">
                 <p className="text-sm text-primary font-bold">
                     Monitor All Your Income & Expenses in One Place
                 </p>
@@ -114,9 +238,8 @@ const Transactions = () => {
                     This transactions section provides a detailed and organized view of all your financial activities in one place.
                 </p>
             </div>
-
-            {/* FILTERS */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
+
 
                 {/* Search By Catagory  */}
                 <label className="input">
@@ -222,91 +345,7 @@ const Transactions = () => {
                 </table>
             </div>
 
-            {/* admin form */}
-            {role === "Admin" && (
-                <div className="text-center gap-3 mb-4">
-                    <h1 className="text-xl text-base-300 bg-primary w-full p-3 font-bold my-5">
-                        Only Admins Can Edit Transactions
-                    </h1>
 
-                    <select
-                        value={form.month}
-                        onChange={(e) =>
-                            setForm({ ...form, month: e.target.value })
-                        }
-                        className="border p-2 mr-2"
-                    >
-                        <option value="">Select Month</option>
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>
-                    </select>
-
-                    <input
-                        type="number"
-                        placeholder="Year"
-                        value={form.year}
-                        onChange={(e) =>
-                            setForm({ ...form, year: e.target.value })
-                        }
-                        className="border p-2 mr-2"
-                    />
-
-                    <input
-                        type="number"
-                        placeholder="Amount"
-                        value={form.amount}
-                        onChange={(e) =>
-                            setForm({ ...form, amount: e.target.value })
-                        }
-                        className="border p-2 mr-2"
-                    />
-
-                    <select
-                        value={form.category}
-                        onChange={(e) =>
-                            setForm({ ...form, category: e.target.value })
-                        }
-                        className="border p-2 mr-2"
-                    >
-                        <option value="">Select Category</option>
-                        <option value="Salary">Salary</option>
-                        <option value="Freelance">Freelance</option>
-                        <option value="Investment">Investment</option>
-                        <option value="Groceries">Groceries</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Entertainment">Entertainment</option>
-                    </select>
-
-                    <select
-                        value={form.type}
-                        onChange={(e) =>
-                            setForm({ ...form, type: e.target.value })
-                        }
-                        className="border p-2 mr-2"
-                    >
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
-                    </select>
-
-                    <button
-                        onClick={isEditing ? handleUpdate : handleAdd}
-                        className="bg-blue-500 text-white px-3 py-2 rounded"
-                    >
-                        {isEditing ? "Update" : "Add"}
-                    </button>
-                </div>
-            )}
         </div>
     );
 };

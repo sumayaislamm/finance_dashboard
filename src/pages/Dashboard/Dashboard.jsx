@@ -1,4 +1,4 @@
-import React from "react";
+import React  from "react";
 import {
     PieChart,
     Pie,
@@ -26,14 +26,22 @@ const Dashboard = () => {
     if (loading) {
         return <Loading />;
     }
+    if (transactions.length === 0) {
+        return (
+            <div className="text-center p-10">
+                <h2>No data yet</h2>
+                <p>Add transactions to see dashboard!</p>
+            </div>
+        );
+    }
 
     // Total calculations
     const totalIncome = transactions
-        .filter((t) => t.type === "income")
+        .filter(t => t.type === "income")
         .reduce((sum, t) => sum + t.amount, 0);
 
     const totalExpense = transactions
-        .filter((t) => t.type === "expense")
+        .filter(t => t.type === "expense")
         .reduce((sum, t) => sum + t.amount, 0);
 
     const totalBalance = totalIncome - totalExpense;
@@ -50,14 +58,13 @@ const Dashboard = () => {
 
     // Line Chart data
 
-
     const monthOrder = [
         "January", "February", "March", "April",
         "May", "June", "July", "August",
         "September", "October", "November", "December"
     ];
 
-    // ✅ Group by Month + Year
+    // Group by Month + Year
     const groupedData = transactions.reduce((acc, t) => {
         const key = `${t.year}-${t.month}`;
 
@@ -87,7 +94,7 @@ const Dashboard = () => {
         return a.year - b.year;
     });
 
-    // ✅ Final line data
+    // Final line data
     const lineData = sortedData.map((m) => ({
         month: `${m.month.slice(0, 3)} ${m.year}`, // 👉 Jan 2025
         income: m.income,
@@ -97,6 +104,16 @@ const Dashboard = () => {
 
     const colors = ["#60a5fa", "#facc15", "#f87171", "#34d399"];
 
+    const highestExpenseCategory = transactions
+        .filter(t => t.type === "expense")
+        .reduce((acc, t) => {
+            acc[t.category] = (acc[t.category] || 0) + t.amount;
+            return acc;
+        }, {});
+
+    const topCategory = Object.entries(highestExpenseCategory).sort(
+        (a, b) => b[1] - a[1]
+    )[0];
     return (
         <div className="p-3 md:p-6 bg-base-100 min-h-screen">
             <div className="text-center">
@@ -115,6 +132,45 @@ const Dashboard = () => {
                     performance, identify trends, and make informed financial decisions
                     with ease.
                 </p>
+                <div className="text-center my-4">
+                    {totalExpense > totalIncome ? (
+                        <p className="text-red-500 font-semibold">
+                            You are spending more than earning ⚠️
+                        </p>
+                    ) : (
+                        <p className="text-green-500 font-semibold">
+                            Your finances are healthy 👍
+                        </p>
+                    )}
+                </div>
+                <div className="grid md:grid-cols-3 gap-4 my-6 ">
+
+                    <div className="bg-base-200 p-4 rounded-xl text-center">
+                        <h3 className="font-semibold">Top Spending Category</h3>
+                        <p className="text-lg font-bold text-red-500">
+                            {topCategory ? topCategory[0] : "N/A"}
+                        </p>
+                    </div>
+
+                    <div className="bg-base-200 p-4 rounded-xl text-center">
+                        <h3 className="font-semibold">Financial Health</h3>
+                        <p className={`font-bold ${totalBalance >= 0 ? "text-green-500" : "text-red-500"}`}>
+                            {totalBalance >= 0 ? "Healthy ✅" : "Overspending ⚠️"}
+                        </p>
+                    </div>
+
+                    <div className="bg-base-200 p-4 rounded-xl text-center">
+                        <h3 className="font-semibold">Savings Rate</h3>
+                        <p className="font-bold text-primary">
+                            {totalIncome > 0
+                                ? ((totalBalance / totalIncome) * 100).toFixed(1)
+                                : 0}%
+                        </p>
+                    </div>
+
+                </div>
+           
+            
             </div>
 
             <div className="flex flex-col md:flex-row gap-6">
@@ -122,6 +178,7 @@ const Dashboard = () => {
                 <div className="w-full md:w-1/2 flex flex-col gap-6">
 
                     {/* Summary */}
+               
                     <div>
                         <h2 className="text-center text-lg font-semibold pb-2">
                             Financial Summary
