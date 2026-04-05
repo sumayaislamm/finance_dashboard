@@ -19,7 +19,19 @@ const Wallets = () => {
     });
 
     return (
-        <div className="p-4 page-slide-in-left">
+        <div className="p-6 page-slide-in-left">
+            <div className="text-center px-10">
+                <h2 className="text-2xl text-primary font-bold mb-3 p-4 ">
+                Card Overview & Transaction History
+            </h2>
+            <p className="text-xs text-base-content font-medium p-4 mb-5">
+                This section provides a detailed view of all your active cards, including card numbers, 
+                current balances, and a comprehensive transaction history. Each card displays income and expense 
+                activities categorized by month and type, enabling you to monitor spending patterns, track salaries, 
+                bills, and other transactions efficiently. With organized tables and clear summaries, you can quickly 
+                assess your card usage, manage budgets, and make informed financial decisions for each account.
+            </p>
+            </div>
             {/* Wallet Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 {walletsWithBalance.map((wallet) => (

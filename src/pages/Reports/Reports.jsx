@@ -88,10 +88,17 @@ const Reports = () => {
     return (
         <div className="p-6 space-y-6 page-slide-in-left">
 
-            <h2 className="text-2xl font-bold text-center">
+            <div className="text-center">
+                <h2 className="text-2xl text-primary font-bold mb-3 p-4 ">
                 Financial Reports
             </h2>
-
+            <p className="text-xs text-base-content font-medium p-4 mb-5">
+                This dashboard provides a comprehensive overview of your financial performance, highlighting key metrics
+                such as total income, expenses, and current balance. The monthly report breaks down income and expenditures for each
+                month, allowing you to track trends, identify patterns, and make informed financial decisions. With clear visual cues
+                and organized data, you can quickly assess your financial health and plan effectively for future months.
+            </p>
+            </div>
             {/* Summary  */}
             <div className="grid md:grid-cols-3 gap-4">
                 <div className="bg-base-200 p-4 rounded-xl shadow text-center">
