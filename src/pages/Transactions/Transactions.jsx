@@ -15,7 +15,7 @@ const Transactions = () => {
 
     const [form, setForm] = useState({
         id: null,
-        date: "",
+        month: "",
         amount: "",
         category: "",
         type: "expense",
@@ -141,7 +141,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, month: e.target.value })
                         }
-                        className="border p-2 mr-2"
+                        className="border p-2 mr-2 gap-3 my-10"
                     >
                         <option value="">Select Month</option>
                         <option value="January">January</option>

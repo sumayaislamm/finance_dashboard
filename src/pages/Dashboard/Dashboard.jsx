@@ -135,7 +135,7 @@ const Dashboard = () => {
                 <div className="text-center my-4">
                     {totalExpense > totalIncome ? (
                         <p className="text-red-500 font-semibold">
-                            You are spending more than earning ⚠️
+                            You are spending more than your total balance ⚠️
                         </p>
                     ) : (
                         <p className="text-green-500 font-semibold">

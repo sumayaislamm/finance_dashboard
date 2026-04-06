@@ -44,7 +44,7 @@ const Wallets = () => {
                             <h3 className="text-xl font-semibold text-white">{wallet.name}</h3>
                             <p className="text-white mb-2">{wallet.number}</p>
                             <p className="text-white font-bold text-2xl">
-                                Balance: {wallet.balance} BDT
+                                Balance: ${wallet.balance}
                             </p>
                         </div>
                         {role === "Admin" && (
@@ -81,7 +81,7 @@ const Wallets = () => {
                                     <th className="px-2 py-1">#</th>
                                     <th className="px-2 py-1">Category</th>
                                     <th className="px-2 py-1">Type</th>
-                                    <th className="px-2 py-1">Amount (BDT)</th>
+                                    <th className="px-2 py-1">Amount</th>
                                     <th className="px-2 py-1">Month</th>
                                     <th className="px-2 py-1">Year</th>
                                 </tr>
@@ -97,7 +97,7 @@ const Wallets = () => {
                                                     {t.type.charAt(0).toUpperCase() + t.type.slice(1)}
                                                 </span>
                                             </td>
-                                            <td className="px-2 py-1">{t.amount}</td>
+                                            <td className="px-2 py-1">$ {t.amount}</td>
                                             <td className="px-2 py-1">{t.month}</td>
                                             <td className="px-2 py-1">{t.year}</td>
                                         </tr>

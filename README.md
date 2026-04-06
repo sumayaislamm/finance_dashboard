@@ -1,136 +1,162 @@
 📊 Finance Dashboard
 
-A responsive and interactive Personal Finance Dashboard built with React, Tailwind CSS, and modern frontend patterns.
-This project helps users track income & expenses, manage multiple wallets, and gain insights into their financial activity — all in a sleek dashboard UI.
+A modern, responsive Personal Finance Dashboard built with React, Tailwind CSS, and Context API.
+It allows users to track income, expenses, manage wallets, and gain meaningful insights into their financial activity.
 
-Live Demo: https://finance-dashboard-seven-eosin.vercel.app/
+🔗 Live Demo
 
-Source Code: https://github.com/sumayaislamm/finance_dashboard
+👉 https://finance-dashboard-seven-eosin.vercel.app/
 
-🚀 Features
-✅ Core Functionality
-📅 Dashboard Overview
-Shows total income, total expenses, and net balance
-Visual charts for expense by category and trend over time
+📂 Source Code
+
+👉 https://github.com/sumayaislamm/finance_dashboard
+
+🚀 Overview
+
+This project was built as part of a Frontend Developer Internship assignment, focusing on:
+
+🎨 Clean UI design
+🧩 Component-based architecture
+🔄 State management
+📊 Data visualization
+💡 User experience
+
+The application simulates a real-world finance tracker using mock data + localStorage persistence.
+
+✨ Features
+📌 Dashboard Overview
+Displays Total Balance, Income, and Expenses
+📈 Time-based Balance Trend (Line Chart)
+🥧 Category-based Expense Breakdown (Pie Chart)
+💡 Financial health indicator (Good / Warning)
 💰 Transactions Management
-Add, edit, and delete transactions (Admin only)
-Filter by category and type (income/expense)
-Sort transactions (latest, oldest, amount)
-🏦 Multiple Wallets Support
-Add and manage wallets
+Add, Edit, Delete transactions (Admin only)
+🔍 Search by category
+🎯 Filter by type (Income / Expense)
+🔄 Sort by:
+Latest / Oldest
+Amount (High → Low / Low → High)
+🏦 Wallet System
+Multiple wallet (card) support
 Assign transactions to wallets
-Real-time wallet balance update based on linked transactions
-📈 Insights and Analytics
+Real-time wallet balance calculation
+Wallet-wise transaction history
+📊 Insights & Analytics
 Highest spending category
-Monthly comparisons and trend charts
+Top 3 expense categories
+Monthly comparison (expense change %)
+Smart financial insights message
+Area chart for income vs expenses
+🧩 Categories Breakdown
+Income and Expense grouped by category
+Visual progress bars with percentage distribution
+📑 Reports
+Monthly income & expense summary
+Export data as:
+📄 CSV
+📦 JSON
+👤 Role-Based UI (Simulated)
+Role	Permissions
+👁 Viewer	Can only view data
+🛠 Admin	Can manage transactions (Add/Edit/Delete)
+
+Role is stored in localStorage and applied globally.
+
 🎨 UI & UX Highlights
-Tailwind CSS for rapid, responsive styling
-Full-page skeleton loader with shimmer effect
-Toast notifications using React Toastify
-Clean error page and loading state handling
-Mobile-friendly layout and smooth navigation
+📱 Fully responsive design
+🎨 Tailwind CSS + DaisyUI
+✨ Smooth page animations
+⏳ Skeleton loading screen
+🔔 Toast notifications (React Toastify)
+❌ Clean error page handling
+🌙 Dark mode toggle
 🧱 Tech Stack
 Layer	Technology
 Frontend	React (Vite)
-Styling	Tailwind CSS
-Routing	React Router DOM
-State Management	React Context API
-Notifications	React Toastify
-Data Storage	Browser localStorage
+Styling	Tailwind CSS + DaisyUI
+Routing	React Router
+State Management	Context API
 Charts	Recharts
+Notifications	React Toastify
+Storage	localStorage
 Deployment	Vercel
-📁 Project Structure (Simplified)
+📁 Project Structure
 finance_dashboard/
 ├── public/
-│   ├── index.html
 │   └── mockdata.json
 ├── src/
 │   ├── components/
 │   ├── context/
-│   │   ├── WalletContext.jsx
+│   │   ├── RoleContext.jsx
 │   │   ├── TransactionContext.jsx
-│   │   └── RoleContext.jsx
+│   │   └── WalletContext.jsx
 │   ├── pages/
-│   │   ├── Dashboard.jsx
-│   │   ├── Wallets.jsx
-│   │   └── Transactions.jsx
+│   │   ├── Dashboard/
+│   │   ├── Transactions/
+│   │   ├── Wallets/
+│   │   ├── Categories/
+│   │   ├── Reports/
+│   │   ├── Analytics/
+│   │   └── Settings/
 │   ├── Routes/
-│   ├── App.css
-│   └── index.jsx
+│   └── index.css
 ├── package.json
-├── vite.config.js
 └── README.md
-📌 Setup & Installation
-
-Clone the repository:
-
+⚙️ Setup & Installation
+# Clone the repository
 git clone https://github.com/sumayaislamm/finance_dashboard.git
+
+# Navigate into the project
 cd finance_dashboard
 
-Install dependencies:
-
+# Install dependencies
 npm install
 
-Run the development server:
-
+# Run development server
 npm run dev
 
-Open the app in your browser:
+👉 Open in browser:
+http://localhost:5173
 
-http://localhost:3000
-💾 How Data Works
-On first load, transactions are loaded from mockdata.json
-All user changes (add/edit/delete) are stored in localStorage
-Wallet balances are computed dynamically from transactions
-Data persists between page reloads thanks to localStorage
+💾 Data Handling
+Initial data is loaded from mockdata.json
+All updates are saved in localStorage
+Data persists even after page refresh
 🧠 Key Implementation Details
-🧩 Transaction Storage
-
-Transactions are centralized in the TransactionContext, and persist using:
-
+📌 Transaction Persistence
 useEffect(() => {
   localStorage.setItem("transactions", JSON.stringify(transactions));
 }, [transactions]);
-
-This ensures all user interactions are stored locally for persistence even after reload.
-
-✨ Wallet Balance Logic
-
-Wallet balances are computed in WalletContext, mapping transactions to wallet totals at runtime:
-
-const walletsWithBalance = wallets.map(wallet => {
-  const walletTx = transactions.filter(t => t.walletId === wallet.id);
-  const balance = walletTx.reduce(
-    (sum, t) => (t.type === "income" ? sum + t.amount : sum - t.amount),
-    0
-  );
-  return { ...wallet, balance };
-});
-🤝 Role-Based Access
-Viewer: Can browse transactions and dashboard
-Admin: Can add/edit/delete transactions and manage financial records
-
-Toggle roles via the Settings panel.
-
-🎯 Potential Improvements
-
-Here are some enhancements you can consider:
-
-Integrate a backend API for real user authentication
-Add Dark Mode support
-Export reports (PDF/Excel)
-Add date range filtering
-Add recurring transactions
-📝 License
-
-This project is open-source and available under the MIT License.
-
+💳 Wallet Balance Calculation
+const balance = walletTx.reduce(
+  (sum, t) => (t.type === "income" ? sum + t.amount : sum - t.amount),
+  0
+);
+🔐 Role-Based UI Logic
+UI changes dynamically based on selected role
+Stored in localStorage for persistence
+🎯 Assignment Requirements Coverage
+Requirement	Status
+Dashboard Summary	✅ Completed
+Transactions (Filter/Search/Sort)	✅ Completed
+Role-Based UI	✅ Completed
+Insights Section	✅ Completed
+State Management	✅ Completed
+Responsive UI	✅ Completed
+Optional Features	✅ Added (Export, Dark Mode, Wallets, Animations)
+🚀 Highlights
+Built with scalable component structure
+Clean separation of concerns using Context API
+Enhanced UX with animations and feedback
+Extended features beyond requirements (wallet system, export)
 🙌 Acknowledgements
 
-This project was built with:
+This project was built using:
 
-React & Vite
-Tailwind CSS
-React Toastify
-Recharts
-And a lot of learning along the way 😄
+⚛️ React + Vite
+🎨 Tailwind CSS + DaisyUI
+📊 Recharts
+🔔 React Toastify
+📬 Contact
+
+Feel free to connect or give feedback! 😊
