@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import {
     PieChart,
     Pie,
@@ -154,8 +154,8 @@ const Dashboard = () => {
 
                     <div className="bg-base-200 p-4 rounded-xl text-center">
                         <h3 className="font-semibold">Financial Health</h3>
-                        <p className={`font-bold ${totalBalance >= 0 ? "text-green-500" : "text-red-500"}`}>
-                            {totalBalance >= 0 ? "Healthy ✅" : "Overspending ⚠️"}
+                        <p className={`font-bold ${totalIncome >= totalExpense ? "text-green-500" : "text-red-500"}`}>
+                            {totalIncome >= totalExpense ? "Healthy ✅" : "Overspending ⚠️"}
                         </p>
                     </div>
 
@@ -169,8 +169,8 @@ const Dashboard = () => {
                     </div>
 
                 </div>
-           
-            
+
+
             </div>
 
             <div className="flex flex-col md:flex-row gap-6">
@@ -178,14 +178,14 @@ const Dashboard = () => {
                 <div className="w-full md:w-1/2 flex flex-col gap-6">
 
                     {/* Summary */}
-               
+
                     <div>
                         <h2 className="text-center text-lg font-semibold pb-2">
                             Financial Summary
                         </h2>
 
-                        <div className="stats bg-base-100 flex justify-center border-base-300 border">
-                            <div className="stat">
+                        <div className="stats bg-base-100 flex border-base-300 border overflow-x-auto no-scrollbar">
+                            <div className="stat min-w-[180px]">
                                 <div className="stat-title font-bold">Account balance</div>
                                 <div className="stat-value">${totalBalance}</div>
 
@@ -198,7 +198,7 @@ const Dashboard = () => {
                                 )}
                             </div>
 
-                            <div className="stat">
+                            <div className="stat min-w-[180px]">
                                 <div className="stat-title font-bold">Income</div>
                                 <div className="stat-value">${totalIncome}</div>
 
@@ -211,7 +211,7 @@ const Dashboard = () => {
                                 )}
                             </div>
 
-                            <div className="stat">
+                            <div className="stat min-w-[180px]">
                                 <div className="stat-title font-bold">Expenses</div>
                                 <div className="stat-value">${totalExpense}</div>
 
