@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useTransactions } from "../../context/TransactionContext";
 import Loading from "../Loading/Loading";
@@ -19,7 +20,7 @@ const Insights = () => {
         return <Loading />;
     }
 
-    //    Category analysis: Calculate total spending per category and identify the highest one
+    // Category analysis: Calculate total spending per category and identify the highest one
     const spendingByCategory = transactions
         .filter(t => t.type === "expense")
         .reduce((acc, t) => {
@@ -32,8 +33,7 @@ const Insights = () => {
             return acc;
         }, []);
 
-    // Higest spending category and its percentage of total expenses
-
+    // Highest spending category and its percentage of total expenses
     const highestCategory = spendingByCategory.length
         ? spendingByCategory.reduce((max, curr) =>
             curr.amount > max.amount ? curr : max
@@ -50,7 +50,7 @@ const Insights = () => {
             ? ((highestCategory.amount / totalExpense) * 100).toFixed(1)
             : 0;
 
-    // Differnt by month: Group transactions by month and year, then calculate total income and expenses for each month. Sort them chronologically for charting.
+    // Different by month: Group transactions by month and year, then calculate total income and expenses for each month
     const monthOrder = [
         "January", "February", "March", "April",
         "May", "June", "July", "August",
@@ -91,20 +91,29 @@ const Insights = () => {
 
     if (!currentMonth) return <p>No data available</p>;
 
-    let change = 0;
 
+    let monthChangePercentage = 0;
 
-    if (currentMonth && prevMonth && prevMonth.expense !== 0) {
-        change = ((prevMonth.expense - currentMonth.expense) / prevMonth.expense) * 100;
-        change = change.toFixed(1);
+    if (prevMonth && currentMonth) {
+        const prevValue = prevMonth.expense || 0;
+        const currValue = currentMonth.expense || 0;
+
+        if (prevValue === 0 && currValue === 0) {
+            monthChangePercentage = 0;
+        } else if (prevValue === 0) {
+            monthChangePercentage = 100; // show 100% increase if any expense occurs
+        } else {
+            monthChangePercentage = ((currValue - prevValue) / prevValue) * 100;
+        }
     }
 
-    // sepending catagory top 3 
+    monthChangePercentage = Number(monthChangePercentage.toFixed(2));
+ 
     const topCategories = [...spendingByCategory]
         .sort((a, b) => b.amount - a.amount)
         .slice(0, 3);
 
-    //    Message based on current month performance
+    // Message based on current month performance
     const insightMessage =
         currentMonth?.expense > currentMonth?.income
             ? "⚠️ You are spending more than you earn this month"
@@ -123,14 +132,16 @@ const Insights = () => {
                 <h2 className="text-2xl text-primary font-bold mb-3 p-4">
                     Financial Insights & Trends
                 </h2>
-                <p className="text-xs text-base-content font-medium p-4 mb-5">This analytics page provides an in-depth and intelligent overview
+                <p className="text-xs text-base-content font-medium p-4 mb-5">
+                    This analytics page provides an in-depth and intelligent overview
                     of your financial performance through advanced insights and dynamic visualizations. It highlights key metrics such as your highest
                     spending category, top categories, and month-to-month changes, helping you quickly understand your financial behavior. The interactive
                     area chart presents a clear comparison of income and expenses over time, allowing you to track trends and fluctuations across months and years.
                     Additionally, smart insights and performance indicators guide you in evaluating your financial health, identifying spending patterns, and making
-                    data-driven decisions with confidence and clarity.</p>
-
+                    data-driven decisions with confidence and clarity.
+                </p>
             </div>
+
             <div className="p-4 grid md:grid-cols-2 lg:grid-cols-2 gap-4">
 
                 {/* Highest Spending */}
@@ -139,10 +150,10 @@ const Insights = () => {
                     <p className="text-lg font-bold text-primary">{highestCategory.category}</p>
                     <p className="text-lg font-bold text-green-800">${highestCategory.amount}</p>
                     <p className="text-sm text-gray-500">
-
                         You’ve spent <span className="font-bold text-primary">{percent}%</span> of your total expenses on {highestCategory.category}.
                     </p>
                 </div>
+
                 {/* Insight */}
                 <div className="bg-base-200 p-4 rounded-xl text-center shadow">
                     <h3 className=" mb-2 text-sm font-bold  text-base-content ">Insight</h3>
@@ -157,25 +168,22 @@ const Insights = () => {
                     <h3 className="mb-2 text-sm font-bold text-base-content">Month-to-Month Overview</h3>
 
                     <p className="text-lg text-primary font-bold">
-                        {change > 0 ? "↑ " : change < 0 ? "↓ " : ""}{Math.abs(change)}%
+                        {monthChangePercentage > 0 ? "↑ " : monthChangePercentage < 0 ? "↓ " : ""}{Math.abs(monthChangePercentage)}%
                     </p>
 
                     <p className="text-sm text-gray-500">
                         {prevMonth?.month} → {currentMonth?.month}
                     </p>
 
-                    {/* Dynamic message based on performance */}
-                    <p className={`mt-2 text-sm font-medium ${change < 0 ? "text-green-600" : change > 0 ? "text-red-600" : "text-gray-600"
+                    <p className={`mt-2 text-sm font-medium ${monthChangePercentage < 0 ? "text-green-600" : monthChangePercentage > 0 ? "text-red-600" : "text-gray-600"
                         }`}>
-                        {change < 0
+                        {monthChangePercentage < 0
                             ? "Great! Your expenses decreased this month."
-                            : change > 0
+                            : monthChangePercentage > 0
                                 ? "Caution! Expenses increased this month."
                                 : "No significant change compared to last month."}
                     </p>
                 </div>
-
-
 
                 {/* Top Categories */}
                 <div className="bg-base-200 p-4 text-center rounded-xl shadow">
@@ -194,7 +202,7 @@ const Insights = () => {
 
                 </div>
 
-                {/*  Chart */}
+                {/* Chart */}
                 <div className="bg-base-200 p-4 rounded-xl shadow col-span-2">
                     <h3 className="font-semibold mb-4">Monthly Overview</h3>
 
