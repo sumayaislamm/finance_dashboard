@@ -141,7 +141,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, month: e.target.value })
                         }
-                        className="border p-2 mr-2 gap-3 my-10"
+                        className="border p-2 mr-2 gap-3 mb-3"
                     >
                         <option value="">Select Month</option>
                         <option value="January">January</option>
@@ -163,7 +163,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, walletId: Number(e.target.value) })
                         }
-                        className="border p-2 mr-2"
+                        className="border p-2 mr-2 gap-3 mb-3"
                     >
                         <option value="">No Wallet</option>
                         {wallets.map(w => (
@@ -179,7 +179,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, year: e.target.value })
                         }
-                        className="border p-2 mr-2"
+                        className="border p-2 mr-2 mb-3"
                     />
 
                     <input
@@ -189,7 +189,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, amount: e.target.value })
                         }
-                        className="border p-2 mr-2"
+                        className="border p-2 mr-2 mb-3"
                     />
 
                     <select
@@ -197,7 +197,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, category: e.target.value })
                         }
-                        className="border p-2 mr-2"
+                        className="border p-2 mr-2 mb-3"
                     >
                         <option value="">Select Category</option>
                         <option value="Salary">Salary</option>
@@ -214,7 +214,7 @@ const Transactions = () => {
                         onChange={(e) =>
                             setForm({ ...form, type: e.target.value })
                         }
-                        className="border p-2 mr-2"
+                        className="border p-2 mr-2 mb-3"
                     >
                         <option value="income">Income</option>
                         <option value="expense">Expense</option>
@@ -323,7 +323,7 @@ const Transactions = () => {
                                     </td>
 
                                     {role === "Admin" && (
-                                        <td>
+                                        <td className="flex justify-center ">
                                             <button
                                                 onClick={() => handleEdit(t)}
                                                 className="btn btn-xs btn-accent mr-3"
