@@ -1,4 +1,4 @@
-import { createContext,  useEffect, useState } from "react";
+import { createContext,  useContext,  useEffect, useState } from "react";
 
 const RoleContext = createContext();
 
@@ -19,5 +19,4 @@ export const RoleProvider = ({ children }) => {
   );
 };
 
-// export const useRole = () => useContext(RoleContext);
-// export const useRole = () => useContext(RoleContext);
+export const useRole = () => useContext(RoleContext);
